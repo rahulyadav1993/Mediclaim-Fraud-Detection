@@ -28,6 +28,8 @@
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
     </form>
     <br>
+	  {{ prediction_text }}
+	 <br>
    <h2>Upload Medicalim CSV file to Detect Fraud</h2>
     <form action = "/file_predict" method = "post" enctype="multipart/form-data">  
         <input type="file" name="file" />  
@@ -38,7 +40,7 @@
     <br>
    <br>
    <br>
-   {{ prediction_text }}
+  
 
 
  </div>
