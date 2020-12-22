@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>Fraud Detection Dashboard</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+</head>
+
+<body>
+ <div class="login">
+ 
+	<h1>Mediclaim Fraud Detection</h1>
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	<input type="text" name='InscClaimAmtReimbursed' placeholder="InscClaimAmtReimbursed" required="required" />
+        <input type="text" name='AdmitForDays' placeholder="AdmitForDays" required="required" />
+		<input type="text" name='DeductibleAmtPaid' placeholder="DeductibleAmtPaid" required="required" />
+		<input type="text" name='IsDiagnosisCode' placeholder="IsDiagnosisCode" required="required" />
+		<input type="text" name='N_Procedure' placeholder="N_Procedure" required="required" />
+   
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+    <br>
+   <h2>Upload Medicalim CSV file to Detect Fraud</h2>
+    <form action = "/file_predict" method = "post" enctype="multipart/form-data">  
+        <input type="file" name="file" />  
+        <input type = "submit" class="btn btn-primary btn-block btn-large" value="Upload">  
+    </form>
+    
+
+    <br>
+   <br>
+   <br>
+   {{ prediction_text }}
+
+
+ </div>
+
+
+</body>
+</html>
