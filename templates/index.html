@@ -13,38 +13,34 @@
 </head>
 
 <body>
- <div class="login">
+
  
 	<h1>Mediclaim Fraud Detection</h1>
      <!-- Main Input For Receiving Query to our ML -->
     <form action="{{ url_for('predict')}}"method="post">
-    	<input type="text" name='InscClaimAmtReimbursed' placeholder="InscClaimAmtReimbursed" required="required" />
-        <input type="text" name='AdmitForDays' placeholder="AdmitForDays" required="required" />
-		<input type="text" name='DeductibleAmtPaid' placeholder="DeductibleAmtPaid" required="required" />
-		<input type="text" name='IsDiagnosisCode' placeholder="IsDiagnosisCode" required="required" />
-		<input type="text" name='N_Procedure' placeholder="N_Procedure" required="required" />
+    	<input type="number" name='InscClaimAmtReimbursed' placeholder="InscClaimAmtReimbursed" required="required" step="0.01" />
+        <input type="number" name='AdmitForDays' placeholder="AdmitForDays" required="required" />
+		<input type="number" name='DeductibleAmtPaid' placeholder="DeductibleAmtPaid" required="required" step="0.01" />
+		<input type="number" name='Diagnosis_Code' placeholder="Diagnosis_Code" required="required" min="0" max="999" />
+		<input type="number" name='Number_of_Procedure' placeholder="Number_of_Procedure" required="required" min="0" max="999"  />
    
 
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
     </form>
     <br>
-	  {{ prediction_text }}
-	 <br>
+      <h3> {{ prediction_text }} </h3>
+ 
+
+    <br>
+
+
    <h2>Upload Mediclaim CSV file to Detect Fraud</h2>
     <form action = "/file_predict" method = "post" enctype="multipart/form-data">  
         <input type="file" name="file" />  
         <input type = "submit" class="btn btn-primary btn-block btn-large" value="Upload">  
     </form>
-    
-
     <br>
-   <br>
-   <br>
-  
-
-
- </div>
-
+{{ prediction_text2 }}
 
 </body>
 </html>
