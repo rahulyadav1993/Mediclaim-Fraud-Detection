@@ -39,9 +39,9 @@ def predict():
     print(final_features)
     prediction = model_imp.predict(final_features)
 
-    output = ["Yes" if prediction==1 else "No"]
+    output = ["Yes there is a Fraud" if prediction==1 else "There is No Fraud"]
 
-    return render_template('index.html', prediction_text='Fraud is:  {}'.format(output[0]))
+    return render_template('index.html', prediction_text='Fraud:  {}'.format(output[0]))
 
 
 @app.route('/file_predict', methods = ['POST'])  
