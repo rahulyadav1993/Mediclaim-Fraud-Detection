@@ -34,40 +34,48 @@ def predict():
     '''
     For rendering results on HTML GUI
     '''
-    int_features = [float(x) for x in request.form.values()]
-    final_features = [np.array(int_features)]
-    print(final_features)
-    prediction = model_imp.predict(final_features)
-
-    output = ["Yes there is a Fraud" if prediction==1 else "There is No Fraud"]
-
-    return render_template('index.html', prediction_text='Fraud:  {}'.format(output[0]))
+    try:
+        int_features = [float(x) for x in request.form.values()]
+        final_features = [np.array(int_features)]
+        print(final_features)
+        prediction = model_imp.predict(final_features)
+    
+        output = ["Yes there is a Fraud" if prediction==1 else "There is No Fraud"]
+    
+        return render_template('index.html', prediction_text='Fraud:  {}'.format(output[0]))
+    
+    except:
+        error_string = "Kindly enter integer value only"
+        return render_template('index.html', prediction_text=error_string)
 
 
 @app.route('/file_predict', methods = ['POST'])  
 
 def file_predict():  
-    if request.method == 'POST':  
-        f = request.files['file']
-        df = pd.read_csv(f)
-        time_tag = datetime.now().isoformat().split(".")[0].replace(":","_")
-        df.to_csv(app.config['UPLOAD_FOLDER'] +  "input_file_"+ time_tag +".csv") 
-        if (set(list(df.columns)) & set(required_columns)) == set(required_columns):
-        	predict_df = df[required_columns]
-        	x= predict_df.values
-        	y_pred = model.predict(x)
-            
+    try:
+        if request.method == 'POST':  
+            f = request.files['file']
+            df = pd.read_csv(f)
+            time_tag = datetime.now().isoformat().split(".")[0].replace(":","_")
+            df.to_csv(app.config['UPLOAD_FOLDER'] +  "input_file_"+ time_tag +".csv") 
+            if (set(list(df.columns)) & set(required_columns)) == set(required_columns):
+            	predict_df = df[required_columns]
+            	x= predict_df.values
+            	y_pred = model.predict(x)
+                
+    
+            	x_df = pd.DataFrame(x,columns = required_columns)
+            	x_df[y_col+"_predicted"] = list(y_pred)
+            	
+            	x_df.to_csv(app.config['DOWNLOAD_FOLDER'] +  "predicted_"+ time_tag +".csv")
+            	return send_from_directory(app.config['DOWNLOAD_FOLDER'],"predicted_"+ time_tag +".csv", as_attachment=True)
+            else:
+            	error_string = "some required columns not present in the file,required cols: " + str(required_columns)
+            	return render_template('index.html', prediction_text2=error_string)
 
-        	x_df = pd.DataFrame(x,columns = required_columns)
-        	x_df[y_col+"_predicted"] = list(y_pred)
-        	
-        	x_df.to_csv(app.config['DOWNLOAD_FOLDER'] +  "predicted_"+ time_tag +".csv")
-        	return send_from_directory(app.config['DOWNLOAD_FOLDER'],"predicted_"+ time_tag +".csv", as_attachment=True)
-        else:
-        	print("some required columns not present in the file,")
-        	print("required cols", str(required_columns))
-        	error_string = "some required columns not present in the file,required cols: " + str(required_columns)
-        	return render_template('index.html', prediction_text=error_string)
+    except:
+        error_string = "File Format is not correct"
+        return render_template('index.html', prediction_text2=error_string)
  
 
 
